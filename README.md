@@ -1,13 +1,14 @@
-# 🦴 Bone Fracture Classification using EfficientNet and Streamlit
+# 🦴 Bone Fracture Classification with EfficientNet & Streamlit
 
-This project aims to classify different types of bone fractures from X-ray images using a deep learning model built on top of **EfficientNet**. It also includes a **Streamlit-based UI** for testing predictions with real X-ray images.
+A deep learning project to classify different types of bone fractures using X-ray images. This solution leverages **EfficientNetB0** for transfer learning and provides an easy-to-use **Streamlit UI** for live predictions.
 
 ---
 
-## 📁 Dataset
+## 📂 Dataset
 
-- **Location**: `/Users/vijeethvj8/Downloads/Elevateme/Bone Break Classification`
-- **Structure**: Folder contains subdirectories for 10 different fracture types:
+- **Location**: `Bone Break Classification/`
+- **Total Images**: 1129
+- **Classes (10)**:
   - Avulsion fracture
   - Comminuted fracture
   - Fracture Dislocation
@@ -21,35 +22,46 @@ This project aims to classify different types of bone fractures from X-ray image
 
 ---
 
-## 🧠 Model
+## 🧠 Model Architecture
 
-- **Base Model**: `EfficientNetB0` (ImageNet pretrained)
-- **Input Size**: `224x224`
-- **Training Setup**:
-  - Data Augmentation: Flip, Rotate, Zoom
-  - Class Weights for imbalance handling
-  - Categorical Crossentropy loss
-  - Adam optimizer
-  - 10–20 Epochs with fine-tuning
-- **Fine-tuning**:
-  - Top layers of EfficientNetB0 were unfrozen and trained with a lower learning rate
-- **Performance**:
-  - Best Accuracy Achieved: ~44% (Train), ~34% (Validation)
-  - Class-wise imbalance exists
+- **Base**: EfficientNetB0 (pretrained on ImageNet)
+- **Input Size**: 224x224x3
+- **Layers Added**:
+  - GlobalAveragePooling2D
+  - Dropout
+  - Dense (softmax)
+
+### Training Setup
+
+- Loss: `categorical_crossentropy`
+- Optimizer: `Adam`
+- Epochs: `10` + fine-tuning
+- Class weights: Computed to address imbalance
+- Data Augmentation: Flip, Rotate, Zoom
 
 ---
 
-## 💻 App (Streamlit UI)
+## 📈 Results
 
-Users can upload X-ray images and receive predictions with confidence scores.
+| Metric           | Value      |
+|------------------|------------|
+| Training Accuracy| ~44%       |
+| Validation Accuracy | ~34%   |
+| Model Confidence | Often <50% |
 
-### Features:
-- Upload `.jpg`, `.jpeg`, or `.png` images
-- Displays predicted fracture type
-- Confidence score shown
-- Low-confidence warnings (<50%)
+> 🔍 **Note**: Due to limited and imbalanced data, model predictions are not highly confident. Accuracy may improve with more data and tuning.
 
-### Run the App:
+---
+
+## 💻 Streamlit UI
+
+### Features
+
+- Upload X-ray images (`.jpg`, `.jpeg`, `.png`)
+- Get predicted fracture type and confidence
+- Alerts if confidence < 50%
+
+### Run the App
 
 ```bash
 streamlit run app.py
